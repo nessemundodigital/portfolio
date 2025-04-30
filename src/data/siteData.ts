@@ -77,6 +77,12 @@ export interface SiteConfig {
     }[];
     copyright: string;
   };
+
+  // Nova Seção Legal
+  legal: {
+    privacyPolicyContent: string;
+    termsOfUseContent: string;
+  };
 }
 
 export const defaultSiteConfig: SiteConfig = {
@@ -89,7 +95,7 @@ export const defaultSiteConfig: SiteConfig = {
     description: "Crio designs impressionantes e aplicações poderosas que cativam usuários e entregam resultados excepcionais para empresas.",
     stats: [
       {
-        value: "10+",
+        value: "5+",
         label: "Anos de Experiência"
       }
     ]
@@ -98,9 +104,9 @@ export const defaultSiteConfig: SiteConfig = {
   about: {
     title: "Design com propósito, código com paixão",
     subtitle: "Sobre Mim",
-    description: "Sou um profissional criativo especializado em design gráfico e desenvolvimento de aplicativos com mais de 8 anos de experiência trabalhando com clientes de diversos setores. Minha abordagem combina visão artística com expertise técnica para criar soluções que não apenas são bonitas, mas também entregam resultados.",
+    description: "Sou um profissional criativo especializado em design gráfico e desenvolvimento de aplicativos com mais de 5 anos de experiência trabalhando com clientes de diversos setores. Minha abordagem combina visão artística com expertise técnica para criar soluções que não apenas são bonitas, mas também entregam resultados.",
     experience: {
-      years: 8,
+      years: 5,
       description: "Anos de Experiência"
     },
     services: [
@@ -124,11 +130,11 @@ export const defaultSiteConfig: SiteConfig = {
   
   portfolio: {
     title: "Trabalhos Recentes",
-    description: "Explore uma seleção dos meus últimos projetos mostrando habilidades em design gráfico e desenvolvimento de aplicativos.",
+    description: "Explore uma seleção dos meus projetos mais recentes em design gráfico e desenvolvimento de aplicativos.",
     categories: [
       {
         id: "all",
-        label: "Todos os Trabalhos"
+        label: "Todos"
       },
       {
         id: "graphic-design",
@@ -198,5 +204,11 @@ export const defaultSiteConfig: SiteConfig = {
       }
     ],
     copyright: "© 2025 AlexDesign. Todos os direitos reservados."
+  },
+
+  // Nova Seção Legal com conteúdo placeholder
+  legal: {
+    privacyPolicyContent: '<p>Conteúdo padrão da Política de Privacidade. Por favor, edite.</p>',
+    termsOfUseContent: '<p>Conteúdo padrão dos Termos de Uso. Por favor, edite.</p>'
   }
 };

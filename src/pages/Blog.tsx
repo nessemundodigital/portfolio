@@ -38,7 +38,7 @@ export default function Blog() {
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-display font-bold mb-6">Blog</h1>
             <p className="text-xl text-gray-600 dark:text-gray-400">
-              Thoughts, insights, and perspectives on design and development.
+            Pensamentos, ideias e perspectivas sobre design e desenvolvimento.
             </p>
           </div>
         </div>
@@ -53,7 +53,7 @@ export default function Blog() {
               </div>
               <input
                 type="text"
-                placeholder="Search articles..."
+                placeholder="Buscar artigo..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary"
@@ -101,7 +101,7 @@ export default function Blog() {
                         
                         <div className="flex items-center text-gray-600 dark:text-gray-400 text-sm mb-4">
                           <Calendar size={14} className="mr-1" />
-                          <span>{new Date(post.date).toLocaleDateString('en-US', { 
+                          <span>{new Date(post.date).toLocaleDateString('pt-BR', { 
                             year: 'numeric', 
                             month: 'short', 
                             day: 'numeric' 

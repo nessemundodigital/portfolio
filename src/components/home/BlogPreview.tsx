@@ -14,9 +14,9 @@ export default function BlogPreview() {
     <section className="section-padding">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">Latest Articles</h2>
+          <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">Últimos Artigos</h2>
           <p className="text-gray-600 dark:text-gray-400 max-w-lg mx-auto">
-            Thoughts, insights, and perspectives from my design and development journey.
+          Pensamentos, percepções e perspectivas da minha jornada de design e desenvolvimento.
           </p>
         </div>
         
@@ -52,7 +52,7 @@ export default function BlogPreview() {
                 </p>
                 
                 <Link to={`/blog/${post.id}`} className="inline-flex items-center text-primary hover:text-primary/80 font-medium">
-                  Read More
+                  Leia Mais
                   <ChevronRight size={16} className="ml-1" />
                 </Link>
               </div>
@@ -68,7 +68,7 @@ export default function BlogPreview() {
               icon={<ChevronRight size={18} />} 
               iconPosition="right"
             >
-              View All Articles
+              Ver Todos os Artigos
             </Button>
           </Link>
         </div>

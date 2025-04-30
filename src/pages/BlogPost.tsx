@@ -19,7 +19,7 @@ export default function BlogPost() {
     if (post) {
       document.title = `${post.title} - Blog - Alex Design`;
     } else {
-      document.title = 'Article Not Found - Alex Design';
+      document.title = 'Artigo não encontrado - Alex Design';
     }
     
     // Simulate loading
@@ -50,13 +50,13 @@ export default function BlogPost() {
   if (!post) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center text-center px-4">
-        <h1 className="text-3xl font-bold mb-4">Article Not Found</h1>
+        <h1 className="text-3xl font-bold mb-4">Artigo não encontrado</h1>
         <p className="text-gray-600 dark:text-gray-400 mb-8">
-          The article you're looking for doesn't exist or has been removed.
+        O artigo que você está procurando não existe ou foi removido.
         </p>
         <Link to="/blog">
           <Button>
-            Back to Blog
+            Voltar ao Blog
           </Button>
         </Link>
       </div>
@@ -72,7 +72,7 @@ export default function BlogPost() {
             className="flex items-center text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary mb-8"
           >
             <ArrowLeft size={18} className="mr-2" />
-            Back to Blog
+            Voltar ao Blog
           </button>
           
           <div className="max-w-4xl mx-auto">
@@ -189,7 +189,7 @@ export default function BlogPost() {
               >
                 <ChevronLeft size={18} className="mr-2" />
                 <div>
-                  <div className="text-sm">Previous Article</div>
+                  <div className="text-sm">Artigo anterior</div>
                   <div className="font-medium">{prevPost.title}</div>
                 </div>
               </Link>
@@ -203,7 +203,7 @@ export default function BlogPost() {
                 className="flex items-center text-right sm:text-left text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary"
               >
                 <div className="flex-grow">
-                  <div className="text-sm">Next Article</div>
+                  <div className="text-sm">Próximo Artigo</div>
                   <div className="font-medium">{nextPost.title}</div>
                 </div>
                 <ChevronRight size={18} className="ml-2" />

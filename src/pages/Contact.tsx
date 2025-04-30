@@ -3,22 +3,11 @@ import ContactSection from '../components/home/ContactSection';
 
 export default function Contact() {
   useEffect(() => {
-    document.title = 'Contact - Alex Design';
+    document.title = 'Contato - Alex Design';
   }, []);
 
   return (
     <div className="min-h-screen">
-      <div className="bg-gradient-to-b from-primary/10 to-background py-16 md:py-24">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-display font-bold mb-6">Contact Me</h1>
-            <p className="text-xl text-gray-600 dark:text-gray-400">
-              Have a project in mind? Let's talk about how we can work together.
-            </p>
-          </div>
-        </div>
-      </div>
-      
       <ContactSection />
       
       <section className="py-16">
@@ -31,7 +20,7 @@ export default function Contact() {
               style={{ border: 0 }} 
               allowFullScreen={true} 
               loading="lazy"
-              title="Office location map"
+              title="Mapa da localização do escritório"
             ></iframe>
           </div>
         </div>

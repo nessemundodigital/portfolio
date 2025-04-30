@@ -21,10 +21,12 @@ export default function PrivateRoute({ children }: PrivateRouteProps) {
     );
   }
 
+  /* Comentado para permitir acesso direto durante o desenvolvimento
   if (!isAuthenticated) {
     // Redirect to login page and save the location they were trying to access
     return <Navigate to="/admin/login" state={{ from: location }} replace />;
   }
+  */
 
   return <>{children}</>;
 }

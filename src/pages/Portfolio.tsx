@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../components/ui/Button';
 import { portfolioItems } from '../data/portfolioData';
+import { defaultSiteConfig } from '../data/siteData';
 
 export default function Portfolio() {
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [visibleItems, setVisibleItems] = useState([...portfolioItems]);
   const [isLoading, setIsLoading] = useState(true);
   
+  const categories = defaultSiteConfig.portfolio.categories;
+
   useEffect(() => {
     document.title = 'Portfolio - Alex Design';
     
@@ -31,9 +34,9 @@ export default function Portfolio() {
       <div className="bg-gradient-to-b from-primary/10 to-background py-16 md:py-24">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-display font-bold mb-6">Portfolio</h1>
+            <h1 className="text-4xl md:text-5xl font-display font-bold mb-6">Portfólio</h1>
             <p className="text-xl text-gray-600 dark:text-gray-400">
-              Explore my collection of work across different disciplines and industries.
+              Explore a minha coleção de trabalhos em diferentes setores.
             </p>
           </div>
         </div>
@@ -42,33 +45,18 @@ export default function Portfolio() {
       <div className="section-padding">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap justify-center gap-4 mb-12">
-            <button
-              onClick={() => setActiveFilter('all')}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors 
-                ${activeFilter === 'all' 
-                  ? 'bg-primary text-white' 
-                  : 'bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700'}`}
-            >
-              All Work
-            </button>
-            <button
-              onClick={() => setActiveFilter('graphic-design')}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors 
-                ${activeFilter === 'graphic-design' 
-                  ? 'bg-primary text-white' 
-                  : 'bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700'}`}
-            >
-              Graphic Design
-            </button>
-            <button
-              onClick={() => setActiveFilter('app-development')}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors 
-                ${activeFilter === 'app-development' 
-                  ? 'bg-primary text-white' 
-                  : 'bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700'}`}
-            >
-              App Development
-            </button>
+            {categories.map(category => (
+              <button
+                key={category.id}
+                onClick={() => setActiveFilter(category.id)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors 
+                  ${activeFilter === category.id 
+                    ? 'bg-primary text-white' 
+                    : 'bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700'}`}
+              >
+                {category.label} 
+              </button>
+            ))}
           </div>
           
           {isLoading ? (
@@ -101,7 +89,7 @@ export default function Portfolio() {
                         <p className="text-gray-200 mb-4 text-center">{item.shortDescription}</p>
                         <Link to={`/portfolio/${item.id}`}>
                           <Button variant="outline" className="border-white text-white hover:bg-white/20">
-                            View Project
+                             Ver Projeto
                           </Button>
                         </Link>
                       </div>

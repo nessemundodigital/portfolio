@@ -63,7 +63,7 @@ export default function Header() {
             <Link to="/contato" className={`text-base font-medium transition-colors hover:text-primary ${location.pathname === '/contato' ? 'text-primary' : ''}`}>
               Contato
             </Link>
-            {isAuthenticated && (
+            {isAuthenticated && !['/', '/portfolio', '/sobre', '/blog', '/contato'].includes(location.pathname) && (
               <Link to="/admin/dashboard" className="text-base font-medium text-primary hover:text-primary/90">
                 Painel
               </Link>
@@ -110,7 +110,7 @@ export default function Header() {
             <Link to="/contato" className="px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-800">
               Contato
             </Link>
-            {isAuthenticated && (
+            {isAuthenticated && !['/', '/portfolio', '/sobre', '/blog', '/contato'].includes(location.pathname) && (
               <Link to="/admin/dashboard" className="px-4 py-3 text-primary hover:bg-gray-100 dark:hover:bg-gray-800">
                 Painel
               </Link>

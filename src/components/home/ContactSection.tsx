@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import Button from '../ui/Button';
 import Input from '../ui/Input';
-import { Mail, MapPin, Phone, Send } from 'lucide-react';
+import { Mail, MapPin, Phone, Send, MessageSquare, Mail as MailIcon, X } from 'lucide-react';
+import { defaultSiteConfig } from '../../data/siteData';
 
 export default function ContactSection() {
   const [formData, setFormData] = useState({
@@ -12,8 +13,7 @@ export default function ContactSection() {
   });
   
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -29,17 +29,17 @@ export default function ContactSection() {
     const newErrors: Record<string, string> = {};
     
     if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
+      newErrors.name = 'Nome é obrigatório';
     }
     
     if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
+      newErrors.email = 'Email é obrigatório';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
+      newErrors.email = 'Email inválido';
     }
     
     if (!formData.message.trim()) {
-      newErrors.message = 'Message is required';
+      newErrors.message = 'Mensagem é obrigatória';
     }
     
     setErrors(newErrors);
@@ -50,41 +50,44 @@ export default function ContactSection() {
     e.preventDefault();
     
     if (validate()) {
-      setIsSubmitting(true);
-      
-      // Simulate API call
-      setTimeout(() => {
-        setIsSubmitting(false);
-        setIsSubmitted(true);
-        setFormData({
-          name: '',
-          email: '',
-          subject: '',
-          message: '',
-        });
-        
-        // Reset submitted status after 5 seconds
-        setTimeout(() => {
-          setIsSubmitted(false);
-        }, 5000);
-      }, 1000);
+      setIsModalOpen(true);
     }
+  };
+
+  const handleSendWhatsApp = () => {
+    const phone = defaultSiteConfig.contact.phone.replace(/\D/g, '');
+    const messageBody = `Nome: ${formData.name}\nEmail: ${formData.email}\nAssunto: ${formData.subject}\n\nMensagem:\n${formData.message}`;
+    const encodedMessage = encodeURIComponent(messageBody);
+    const whatsappUrl = `https://wa.me/${phone}?text=${encodedMessage}`;
+    window.open(whatsappUrl, '_blank');
+    setIsModalOpen(false);
+  };
+
+  const handleSendEmail = () => {
+    const email = defaultSiteConfig.contact.email;
+    const subject = formData.subject || 'Contato pelo Site';
+    const body = `Nome: ${formData.name}\nEmail: ${formData.email}\n\nMensagem:\n${formData.message}`;
+    const encodedSubject = encodeURIComponent(subject);
+    const encodedBody = encodeURIComponent(body);
+    const mailtoUrl = `mailto:${email}?subject=${encodedSubject}&body=${encodedBody}`;
+    window.location.href = mailtoUrl;
+    setIsModalOpen(false);
   };
 
   return (
     <section className="section-padding bg-gray-50 dark:bg-gray-900" id="contact">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">Get In Touch</h2>
+          <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">Entre em Contato</h2>
           <p className="text-gray-600 dark:text-gray-400 max-w-lg mx-auto">
-            Have a project in mind or want to discuss possibilities? I'd love to hear from you.
+            Tem um projeto em mente ou quer discutir possibilidades? Adoraria ouvir você.
           </p>
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
           <div className="lg:col-span-1">
             <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md h-full">
-              <h3 className="text-xl font-bold mb-6">Contact Information</h3>
+              <h3 className="text-xl font-bold mb-6">Informações de Contato</h3>
               
               <div className="space-y-6">
                 <div className="flex items-start">
@@ -104,7 +107,7 @@ export default function ContactSection() {
                     <Phone size={20} />
                   </div>
                   <div>
-                    <h4 className="font-medium mb-1">Phone</h4>
+                    <h4 className="font-medium mb-1">Telefone</h4>
                     <a href="tel:+15551234567" className="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors">
                       +1 (555) 123-4567
                     </a>
@@ -116,7 +119,7 @@ export default function ContactSection() {
                     <MapPin size={20} />
                   </div>
                   <div>
-                    <h4 className="font-medium mb-1">Location</h4>
+                    <h4 className="font-medium mb-1">Localização</h4>
                     <p className="text-gray-600 dark:text-gray-400">
                       123 Design Street<br />
                       Creative City, CD 12345
@@ -126,7 +129,7 @@ export default function ContactSection() {
               </div>
               
               <div className="mt-8">
-                <h4 className="font-medium mb-4">Follow Me</h4>
+                <h4 className="font-medium mb-4">Siga-me</h4>
                 <div className="flex space-x-4">
                   <a 
                     href="https://instagram.com" 
@@ -161,81 +164,103 @@ export default function ContactSection() {
           </div>
           
           <div className="lg:col-span-2">
-            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 md:p-8 shadow-md">
-              <h3 className="text-xl font-bold mb-6">Send a Message</h3>
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 md:p-8 shadow-md relative">
+              <h3 className="text-xl font-bold mb-6">Envie uma Mensagem</h3>
               
-              {isSubmitted ? (
-                <div className="bg-success/10 border border-success/30 rounded-lg p-6 text-center">
-                  <div className="inline-flex justify-center items-center w-12 h-12 rounded-full bg-success/20 text-success mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
-                  </div>
-                  <h4 className="text-lg font-medium mb-2">Message Sent Successfully!</h4>
-                  <p className="text-gray-600 dark:text-gray-400">Thank you for reaching out. I'll get back to you as soon as possible.</p>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <Input
-                      label="Your Name"
-                      placeholder="John Doe"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      error={errors.name}
-                      required
-                    />
-                    
-                    <Input
-                      label="Email Address"
-                      placeholder="john@example.com"
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      error={errors.email}
-                      required
-                    />
-                  </div>
-                  
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <Input
-                    label="Subject"
-                    placeholder="Project Inquiry"
-                    name="subject"
-                    value={formData.subject}
+                    label="Seu Nome"
+                    placeholder="João Silva"
+                    name="name"
+                    value={formData.name}
                     onChange={handleChange}
+                    error={errors.name}
+                    required
                   />
                   
-                  <div className="w-full">
-                    <label className="block text-sm font-medium text-foreground mb-1">
-                      Message
-                    </label>
-                    <textarea
-                      name="message"
-                      value={formData.message}
-                      onChange={handleChange}
-                      placeholder="Tell me about your project..."
-                      rows={5}
-                      className={`w-full px-3 py-2 bg-background text-foreground rounded-md border ${
-                        errors.message ? 'border-error focus:ring-error' : 'border-input focus:ring-ring'
-                      } focus:outline-none focus:ring-2 resize-none`}
-                      required
-                    />
-                    {errors.message && (
-                      <p className="mt-1 text-sm text-error">{errors.message}</p>
-                    )}
+                  <Input
+                    label="Endereço de Email"
+                    placeholder="joao@exemplo.com"
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    error={errors.email}
+                    required
+                  />
+                </div>
+                
+                <Input
+                  label="Assunto"
+                  placeholder="Consulta de Projeto"
+                  name="subject"
+                  value={formData.subject}
+                  onChange={handleChange}
+                />
+                
+                <div className="w-full">
+                  <label className="block text-sm font-medium text-foreground mb-1">
+                    Mensagem
+                  </label>
+                  <textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    placeholder="Conte-me sobre seu projeto..."
+                    rows={5}
+                    className={`w-full px-3 py-2 bg-background text-foreground rounded-md border ${
+                      errors.message ? 'border-error focus:ring-error' : 'border-input focus:ring-ring'
+                    } focus:outline-none focus:ring-2 resize-none`}
+                    required
+                  />
+                  {errors.message && (
+                    <p className="mt-1 text-sm text-error">{errors.message}</p>
+                  )}
+                </div>
+                
+                <Button 
+                  type="submit" 
+                  size="lg" 
+                  fullWidth 
+                  icon={<Send size={18} />}
+                  iconPosition="right"
+                >
+                  Enviar Mensagem
+                </Button>
+              </form>
+              
+              {isModalOpen && (
+                <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-10 rounded-xl p-4">
+                  <div className="bg-white dark:bg-gray-800 rounded-lg p-8 shadow-xl max-w-sm w-full relative">
+                    <button 
+                      onClick={() => setIsModalOpen(false)}
+                      className="absolute top-2 right-2 p-1 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full"
+                      aria-label="Fechar"
+                    >
+                      <X size={20} />
+                    </button>
+                    <h4 className="text-lg font-semibold mb-6 text-center">Escolha como enviar:</h4>
+                    <div className="space-y-4">
+                      <Button 
+                        fullWidth 
+                        onClick={handleSendWhatsApp}
+                        icon={<MessageSquare size={18} />}
+                        className="bg-green-500 hover:bg-green-600 text-white"
+                      >
+                        Enviar por WhatsApp
+                      </Button>
+                      <Button 
+                        fullWidth 
+                        onClick={handleSendEmail}
+                        icon={<MailIcon size={18} />}
+                        variant="outline"
+                      >
+                        Enviar por E-mail
+                      </Button>
+                    </div>
                   </div>
-                  
-                  <Button 
-                    type="submit" 
-                    size="lg" 
-                    fullWidth 
-                    disabled={isSubmitting}
-                    icon={isSubmitting ? undefined : <Send size={18} />}
-                    iconPosition="right"
-                  >
-                    {isSubmitting ? 'Sending...' : 'Send Message'}
-                  </Button>
-                </form>
+                </div>
               )}
             </div>
           </div>

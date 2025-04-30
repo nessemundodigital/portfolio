@@ -13,12 +13,11 @@ export default function PortfolioDetail() {
   
   useEffect(() => {
     if (project) {
-      document.title = `${project.title} - Portfolio - Alex Design`;
+      document.title = `${project.title} - Portfólio - Alex Design`;
     } else {
-      document.title = 'Project Not Found - Alex Design';
+      document.title = 'Projeto Não Encontrado - Alex Design';
     }
     
-    // Simulate loading
     setTimeout(() => {
       setIsLoading(false);
     }, 500);
@@ -43,18 +42,20 @@ export default function PortfolioDetail() {
   if (!project) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center text-center px-4">
-        <h1 className="text-3xl font-bold mb-4">Project Not Found</h1>
+        <h1 className="text-3xl font-bold mb-4">Projeto Não Encontrado</h1>
         <p className="text-gray-600 dark:text-gray-400 mb-8">
-          The project you're looking for doesn't exist or has been removed.
+          O projeto que você está procurando não existe ou foi removido.
         </p>
         <Link to="/portfolio">
           <Button>
-            Back to Portfolio
+            Voltar ao Portfólio
           </Button>
         </Link>
       </div>
     );
   }
+
+  const translatedCategory = project.category === 'graphic-design' ? 'Design Gráfico' : 'Desenvolvimento de Apps';
 
   return (
     <div className="min-h-screen">
@@ -65,7 +66,7 @@ export default function PortfolioDetail() {
             className="flex items-center text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary mb-8"
           >
             <ArrowLeft size={18} className="mr-2" />
-            Back to Portfolio
+            Voltar ao Portfólio
           </button>
           
           <h1 className="text-3xl md:text-4xl font-display font-bold mb-4">{project.title}</h1>
@@ -77,7 +78,7 @@ export default function PortfolioDetail() {
             </div>
             <div className="flex items-center text-gray-600 dark:text-gray-400">
               <Tag size={16} className="mr-2" />
-              <span>{project.category === 'graphic-design' ? 'Graphic Design' : 'App Development'}</span>
+              <span>{translatedCategory}</span>
             </div>
           </div>
         </div>
@@ -95,37 +96,37 @@ export default function PortfolioDetail() {
             </div>
             
             <div className="prose prose-lg dark:prose-invert max-w-none">
-              <h2>Project Overview</h2>
+              <h2>Visão Geral do Projeto</h2>
               <p>{project.description}</p>
               
-              <h2>The Challenge</h2>
+              <h2>O Desafio</h2>
               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus id dignissim justo. Nulla ut facilisis ligula. Interdum et malesuada fames ac ante ipsum primis in faucibus.</p>
               
-              <h2>The Solution</h2>
+              <h2>A Solução</h2>
               <p>Vestibulum magna purus, faucibus nec tincidunt sit amet, placerat vel eros. Cras elementum vehicula magna, ut dapibus metus. Vestibulum condimentum arcu vel magna imperdiet, sed ultricies sapien sodales.</p>
               
-              <h2>Results</h2>
+              <h2>Resultados</h2>
               <p>Praesent efficitur, nibh vitae fringilla scelerisque, est neque faucibus quam, in iaculis purus libero eget mauris. Vestibulum varius, ipsum id ultrices molestie, eros dui sodales eros, nec malesuada low turpis libero et tortor.</p>
             </div>
           </div>
           
           <div className="lg:col-span-1">
             <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md sticky top-24">
-              <h3 className="text-xl font-bold mb-6">Project Details</h3>
+              <h3 className="text-xl font-bold mb-6">Detalhes do Projeto</h3>
               
               <div className="space-y-4 mb-8">
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-gray-100">Client</h4>
+                  <h4 className="font-medium text-gray-900 dark:text-gray-100">Cliente</h4>
                   <p className="text-gray-600 dark:text-gray-400">{project.client}</p>
                 </div>
                 
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-gray-100">Timeline</h4>
+                  <h4 className="font-medium text-gray-900 dark:text-gray-100">Cronograma</h4>
                   <p className="text-gray-600 dark:text-gray-400">{project.timeline}</p>
                 </div>
                 
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-gray-100">Services</h4>
+                  <h4 className="font-medium text-gray-900 dark:text-gray-100">Serviços</h4>
                   <div className="flex flex-wrap gap-2 mt-2">
                     {project.services.map((service, index) => (
                       <span 
@@ -139,7 +140,7 @@ export default function PortfolioDetail() {
                 </div>
                 
                 <div>
-                  <h4 className="font-medium text-gray-900 dark:text-gray-100">Tools Used</h4>
+                  <h4 className="font-medium text-gray-900 dark:text-gray-100">Ferramentas Usadas</h4>
                   <div className="flex flex-wrap gap-2 mt-2">
                     {project.tools.map((tool, index) => (
                       <span 
@@ -152,19 +153,6 @@ export default function PortfolioDetail() {
                   </div>
                 </div>
               </div>
-              
-              {project.projectUrl && (
-                <a 
-                  href={project.projectUrl} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="block"
-                >
-                  <Button fullWidth icon={<ExternalLink size={18} />} iconPosition="right">
-                    Visit Project
-                  </Button>
-                </a>
-              )}
             </div>
           </div>
         </div>

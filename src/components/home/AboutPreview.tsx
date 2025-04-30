@@ -24,7 +24,7 @@ export default function AboutPreview() {
                     <Zap size={24} className="text-primary" />
                   </div>
                   <div>
-                    <div className="text-xl md:text-2xl font-bold">8+</div>
+                    <div className="text-xl md:text-2xl font-bold">5+</div>
                     <div className="text-gray-600 dark:text-gray-400 text-sm">Anos de Experiência</div>
                   </div>
                 </div>
@@ -36,7 +36,7 @@ export default function AboutPreview() {
             <h2 className="text-3xl md:text-4xl font-display font-bold mb-6">Design com propósito, código com paixão</h2>
             
             <p className="text-gray-600 dark:text-gray-400 mb-8">
-              Sou um profissional criativo especializado em design gráfico e desenvolvimento de aplicativos com mais de 8 anos de experiência trabalhando com clientes de diversos setores. Minha abordagem combina visão artística com expertise técnica para criar soluções que não apenas são bonitas, mas também entregam resultados.
+              Sou um profissional criativo especializado em design gráfico e desenvolvimento de aplicativos com mais de 5 anos de experiência trabalhando com clientes de diversos setores. Minha abordagem combina visão artística com expertise técnica para criar soluções que não apenas são bonitas, mas também entregam resultados.
             </p>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">

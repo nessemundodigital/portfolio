@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { 
   LayoutDashboard, Image, FileText, Users, Settings, LogOut, 
-  Menu, X, ChevronDown, Moon, Sun, User, Bell, Palette, Sliders
+  Menu, X, ChevronDown, Moon, Sun, User, Bell, Palette, Sliders,
+  ChevronLeft, ChevronRight
 } from 'lucide-react';
 
 interface AdminLayoutProps {
-  children: React.ReactNode;
+  // children não é mais necessário aqui se usarmos Outlet
 }
 
-export default function AdminLayout({ children }: AdminLayoutProps) {
+export default function AdminLayout(/* { children }: AdminLayoutProps */) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
   const { user, logout } = useAuth();
@@ -28,6 +30,10 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     setIsSidebarOpen(false);
   };
   
+  const toggleSidebarCollapse = () => {
+    setIsSidebarCollapsed(!isSidebarCollapsed);
+  };
+  
   const menuItems = [
     { path: '/admin/dashboard', label: 'Dashboard', icon: <LayoutDashboard size={20} /> },
     { path: '/admin/portfolio', label: 'Portfólio', icon: <Image size={20} /> },
@@ -38,7 +44,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className={`min-h-screen bg-gray-50 dark:bg-gray-900 lg:flex lg:group ${isSidebarCollapsed ? 'lg:sidebar-collapsed' : ''}`}>
       {/* Top Header */}
       <header className="bg-white dark:bg-gray-800 shadow-sm fixed top-0 left-0 right-0 z-20 h-16">
         <div className="flex items-center justify-between h-full px-4">
@@ -118,52 +124,72 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         </div>
       </header>
       
-      {/* Sidebar */}
+      {/* Overlay para sidebar mobile */}
       <div 
-        className={`fixed inset-0 bg-gray-900 bg-opacity-50 z-10 lg:hidden transition-opacity duration-300 ${
+        className={`fixed inset-0 bg-gray-900 bg-opacity-50 z-30 lg:hidden transition-opacity duration-300 ${
           isSidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
         onClick={closeSidebar}
       />
       
-      <aside className={`fixed top-16 bottom-0 left-0 w-64 bg-white dark:bg-gray-800 shadow-md z-10 transform transition-transform duration-300 ease-in-out ${
-        isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
-      }`}>
-        <nav className="h-full overflow-y-auto py-6 px-4">
+      {/* Sidebar */}
+      <aside className={`fixed top-0 bottom-0 left-0 bg-white dark:bg-gray-800 shadow-md z-40 lg:z-auto lg:sticky lg:top-0 lg:h-screen 
+                     flex flex-col transition-all duration-300 ease-in-out 
+                     ${isSidebarCollapsed ? 'w-20' : 'w-64'} 
+                     ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
+        <div className="h-16 flex items-center px-4 flex-shrink-0">
+          {/* Pode colocar um logo menor aqui ou deixar vazio */}
+        </div>
+
+        <nav className="flex-grow overflow-y-auto overflow-x-hidden py-6 px-4">
           <ul className="space-y-2">
             {menuItems.map((item) => (
               <li key={item.path}>
                 <Link
                   to={item.path}
-                  className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
-                    location.pathname === item.path 
-                      ? 'bg-primary/10 text-primary'
-                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
-                  }`}
+                  title={item.label}
+                  className={`flex items-center px-4 py-3 rounded-lg transition-colors 
+                            ${isSidebarCollapsed ? 'justify-center' : ''} 
+                            ${location.pathname.startsWith(item.path)
+                              ? 'bg-primary/10 text-primary'
+                              : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+                            }`}
                   onClick={closeSidebar}
                 >
-                  <span className="mr-3">{item.icon}</span>
-                  <span>{item.label}</span>
+                  <span className={`${isSidebarCollapsed ? 'mx-auto' : 'mr-3'}`}>{item.icon}</span>
+                  <span className={`${isSidebarCollapsed ? 'hidden' : 'block'}`}>{item.label}</span>
                 </Link>
               </li>
             ))}
           </ul>
-          
-          <div className="border-t border-gray-200 dark:border-gray-700 mt-6 pt-6">
-            <button
-              onClick={handleLogout}
-              className="flex items-center px-4 py-3 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 w-full"
-            >
-              <LogOut size={20} className="mr-3" />
-              <span>Sair</span>
-            </button>
-          </div>
         </nav>
+
+        <div className="border-t border-gray-200 dark:border-gray-700 pt-4 pb-6 px-4 flex-shrink-0">
+          <button
+              onClick={toggleSidebarCollapse}
+              className={`hidden lg:flex items-center justify-center w-full px-4 py-3 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 mb-2 transition-colors ${isSidebarCollapsed ? 'justify-center' : ''}`}
+              aria-label={isSidebarCollapsed ? 'Expandir menu' : 'Recolher menu'}
+              title={isSidebarCollapsed ? 'Expandir' : 'Recolher'}
+          >
+              {isSidebarCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+          </button>
+
+          <button
+            onClick={handleLogout}
+            title="Sair"
+            className={`flex items-center px-4 py-3 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 w-full transition-colors ${isSidebarCollapsed ? 'justify-center' : ''}`}
+          >
+            <LogOut size={20} className={`${isSidebarCollapsed ? 'mx-auto' : 'mr-3'}`} />
+            <span className={`${isSidebarCollapsed ? 'hidden' : 'block'}`}>Sair</span>
+          </button>
+        </div>
       </aside>
       
       {/* Main Content */}
-      <main className="lg:ml-64 pt-16">
-        {children}
+      <main className={`flex-grow pt-16 transition-all duration-300 ease-in-out ${isSidebarCollapsed ? 'lg:ml-20' : 'lg:ml-64'}`}>
+        <div className="px-4 sm:px-6 lg:px-8 py-8"> 
+           <Outlet /> 
+        </div>
       </main>
     </div>
   );

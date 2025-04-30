@@ -3,7 +3,12 @@ import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import ThemeProvider from './context/ThemeContext';
 import AuthProvider from './context/AuthContext';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-router-dom';
+
+// Importar Layouts
+import AdminLayout from './components/admin/AdminLayout';
+
+// Importar Páginas Públicas
 import Home from './pages/Home';
 import Portfolio from './pages/Portfolio';
 import About from './pages/About';
@@ -11,6 +16,11 @@ import Blog from './pages/Blog';
 import Contact from './pages/Contact';
 import BlogPost from './pages/BlogPost';
 import PortfolioDetail from './pages/PortfolioDetail';
+import NotFound from './pages/NotFound';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfUse from './pages/TermsOfUse';
+
+// Importar Páginas Admin
 import Login from './pages/admin/Login';
 import Dashboard from './pages/admin/Dashboard';
 import ManagePortfolio from './pages/admin/ManagePortfolio';
@@ -18,9 +28,23 @@ import ManageBlog from './pages/admin/ManageBlog';
 import ManageTestimonials from './pages/admin/ManageTestimonials';
 import ManageAbout from './pages/admin/ManageAbout';
 import ManageSettings from './pages/admin/ManageSettings';
-import NotFound from './pages/NotFound';
+
+// Importar Componentes Auxiliares
 import PrivateRoute from './components/auth/PrivateRoute';
 import { Toaster, ToastProvider } from './components/ui/Toaster';
+
+// Layout Público (Cabeçalho/Rodapé)
+function PublicLayout() {
+  return (
+    <>
+      <Header />
+      <main className="flex-grow">
+        <Outlet /> {/* Páginas públicas serão renderizadas aqui */}
+      </main>
+      <Footer />
+    </>
+  );
+}
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -49,9 +73,9 @@ function App() {
         <AuthProvider>
           <Router>
             <div className="min-h-screen flex flex-col bg-background text-foreground">
-              <Header />
-              <main className="flex-grow">
-                <Routes>
+              <Routes>
+                {/* Rotas Públicas usando PublicLayout */}
+                <Route element={<PublicLayout />}>
                   <Route path="/" element={<Home />} />
                   <Route path="/portfolio" element={<Portfolio />} />
                   <Route path="/portfolio/:id" element={<PortfolioDetail />} />
@@ -59,18 +83,35 @@ function App() {
                   <Route path="/blog" element={<Blog />} />
                   <Route path="/blog/:id" element={<BlogPost />} />
                   <Route path="/contato" element={<Contact />} />
-                  <Route path="/admin/login" element={<Login />} />
-                  <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
-                  <Route path="/admin/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-                  <Route path="/admin/portfolio" element={<PrivateRoute><ManagePortfolio /></PrivateRoute>} />
-                  <Route path="/admin/blog" element={<PrivateRoute><ManageBlog /></PrivateRoute>} />
-                  <Route path="/admin/depoimentos" element={<PrivateRoute><ManageTestimonials /></PrivateRoute>} />
-                  <Route path="/admin/sobre" element={<PrivateRoute><ManageAbout /></PrivateRoute>} />
-                  <Route path="/admin/configuracoes" element={<PrivateRoute><ManageSettings /></PrivateRoute>} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </main>
-              <Footer />
+                  <Route path="/privacidade" element={<PrivacyPolicy />} />
+                  <Route path="/termos" element={<TermsOfUse />} />
+                </Route>
+
+                {/* Rota de Login Admin (sem layout público ou admin) */}
+                <Route path="/admin/login" element={<Login />} />
+
+                {/* Rotas de Admin Aninhadas usando AdminLayout */}
+                <Route 
+                  path="/admin" 
+                  element={
+                    <PrivateRoute>
+                      <AdminLayout /> 
+                    </PrivateRoute>
+                  }
+                >
+                  {/* Redirecionamento da raiz /admin para /admin/dashboard */}
+                  <Route index element={<Navigate to="dashboard" replace />} /> 
+                  <Route path="dashboard" element={<Dashboard />} />
+                  <Route path="portfolio" element={<ManagePortfolio />} />
+                  <Route path="blog" element={<ManageBlog />} />
+                  <Route path="depoimentos" element={<ManageTestimonials />} />
+                  <Route path="sobre" element={<ManageAbout />} />
+                  <Route path="configuracoes" element={<ManageSettings />} />
+                </Route>
+
+                {/* Rota 404 (sem layout específico) */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
               <Toaster />
             </div>
           </Router>

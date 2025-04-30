@@ -86,7 +86,7 @@ export default function HeroSection() {
                 
                 <div className="absolute bottom-6 right-6 w-[130px] h-[80px] bg-white/90 dark:bg-gray-900/90 rounded-lg shadow-lg flex items-center justify-center">
                   <div className="text-center">
-                    <div className="font-bold text-lg">10+</div>
+                    <div className="font-bold text-lg">5+</div>
                     <div className="text-xs text-gray-600 dark:text-gray-400">Anos de Experiência</div>
                   </div>
                 </div>
